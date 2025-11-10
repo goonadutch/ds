@@ -6448,3 +6448,1093 @@ int main() {
     
     return 0;
 }
+
+
+----------------------
+----------doubly---------------
+---------------------
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+};
+
+class DoublyLL {
+public:
+    Node* head;
+    
+    DoublyLL() {
+        head = NULL;
+    }
+    
+    void insertBegin(int val) {
+        Node* newNode = new Node();
+        newNode->data = val;
+        newNode->prev = NULL;
+        newNode->next = head;
+        if (head != NULL) head->prev = newNode;
+        head = newNode;
+    }
+    
+    void insertEnd(int val) {
+        Node* newNode = new Node();
+        newNode->data = val;
+        newNode->next = NULL;
+        if (head == NULL) {
+            newNode->prev = NULL;
+            head = newNode;
+            return;
+        }
+        Node* temp = head;
+        while (temp->next != NULL) temp = temp->next;
+        temp->next = newNode;
+        newNode->prev = temp;
+    }
+    
+    void deleteBegin() {
+        if (head == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+        Node* temp = head;
+        head = head->next;
+        if (head != NULL) head->prev = NULL;
+        delete temp;
+    }
+    
+    void deleteEnd() {
+        if (head == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+        if (head->next == NULL) {
+            delete head;
+            head = NULL;
+            return;
+        }
+        Node* temp = head;
+        while (temp->next != NULL) temp = temp->next;
+        temp->prev->next = NULL;
+        delete temp;
+    }
+    
+    bool search(int val) {
+        Node* temp = head;
+        while (temp != NULL) {
+            if (temp->data == val) return true;
+            temp = temp->next;
+        }
+        return false;
+    }
+    
+    void display() {
+        if (head == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+        Node* temp = head;
+        while (temp != NULL) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    DoublyLL dll;
+    int choice, val;
+    
+    while (true) {
+        cout << "\n1. Insert Begin\n2. Insert End\n3. Delete Begin\n4. Delete End\n5. Search\n6. Display\n7. Exit\nChoice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                cout << "Value: ";
+                cin >> val;
+                dll.insertBegin(val);
+                break;
+            case 2:
+                cout << "Value: ";
+                cin >> val;
+                dll.insertEnd(val);
+                break;
+            case 3:
+                dll.deleteBegin();
+                break;
+            case 4:
+                dll.deleteEnd();
+                break;
+            case 5:
+                cout << "Value: ";
+                cin >> val;
+                if (dll.search(val)) cout << "Found" << endl;
+                else cout << "Not found" << endl;
+                break;
+            case 6:
+                dll.display();
+                break;
+            case 7:
+                return 0;
+        }
+    }
+}
+
+
+
+
+-----------------------------
+--------------------------------
+------circular----------------
+
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+class CircularLL {
+public:
+    Node* tail;
+    
+    CircularLL() {
+        tail = NULL;
+    }
+    
+    void insertBegin(int val) {
+        Node* newNode = new Node();
+        newNode->data = val;
+        if (tail == NULL) {
+            tail = newNode;
+            tail->next = tail;
+            return;
+        }
+        newNode->next = tail->next;
+        tail->next = newNode;
+    }
+    
+    void insertEnd(int val) {
+        Node* newNode = new Node();
+        newNode->data = val;
+        if (tail == NULL) {
+            tail = newNode;
+            tail->next = tail;
+            return;
+        }
+        newNode->next = tail->next;
+        tail->next = newNode;
+        tail = newNode;
+    }
+    
+    void deleteBegin() {
+        if (tail == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+        Node* head = tail->next;
+        if (head == tail) {
+            delete tail;
+            tail = NULL;
+            return;
+        }
+        tail->next = head->next;
+        delete head;
+    }
+    
+    void deleteEnd() {
+        if (tail == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+        Node* head = tail->next;
+        if (head == tail) {
+            delete tail;
+            tail = NULL;
+            return;
+        }
+        Node* temp = head;
+        while (temp->next != tail) temp = temp->next;
+        temp->next = head;
+        delete tail;
+        tail = temp;
+    }
+    
+    bool search(int val) {
+        if (tail == NULL) return false;
+        Node* temp = tail->next;
+        do {
+            if (temp->data == val) return true;
+            temp = temp->next;
+        } while (temp != tail->next);
+        return false;
+    }
+    
+    void display() {
+        if (tail == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+        Node* temp = tail->next;
+        do {
+            cout << temp->data << " ";
+            temp = temp->next;
+        } while (temp != tail->next);
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularLL cll;
+    int choice, val;
+    
+    while (true) {
+        cout << "\n1. Insert Begin\n2. Insert End\n3. Delete Begin\n4. Delete End\n5. Search\n6. Display\n7. Exit\nChoice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                cout << "Value: ";
+                cin >> val;
+                cll.insertBegin(val);
+                break;
+            case 2:
+                cout << "Value: ";
+                cin >> val;
+                cll.insertEnd(val);
+                break;
+            case 3:
+                cll.deleteBegin();
+                break;
+            case 4:
+                cll.deleteEnd();
+                break;
+            case 5:
+                cout << "Value: ";
+                cin >> val;
+                if (cll.search(val)) cout << "Found" << endl;
+                else cout << "Not found" << endl;
+                break;
+            case 6:
+                cll.display();
+                break;
+            case 7:
+                return 0;
+        }
+    }
+}
+
+--------------adv stack in vector --------------
+--------------------------------------------
+---------------------------------------------
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+class Stack {
+public:
+    vector<int> stack;
+    
+    void push(int val) {
+        stack.push_back(val);
+    }
+    
+    void pop() {
+        if (stack.empty()) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        stack.pop_back();
+    }
+    
+    void multipop(int n) {
+        if (stack.empty()) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        for (int i = 0; i < n && !stack.empty(); i++) {
+            stack.pop_back();
+        }
+    }
+    
+    void orderedPush(int val) {
+        vector<int> temp;
+        while (!stack.empty() && stack.back() > val) {
+            temp.push_back(stack.back());
+            stack.pop_back();
+        }
+        stack.push_back(val);
+        while (!temp.empty()) {
+            stack.push_back(temp.back());
+            temp.pop_back();
+        }
+    }
+    
+    void peek() {
+        if (stack.empty()) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        cout << "Top: " << stack.back() << endl;
+    }
+    
+    void display() {
+        if (stack.empty()) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        for (int i = 0; i < stack.size(); i++) {
+            cout << stack[i] << " ";
+        }
+        cout << endl;
+    }
+    
+    int top() {
+        if (stack.empty()) return -1;
+        return stack.back();
+    }
+    
+    bool isEmpty() {
+        return stack.empty();
+    }
+};
+
+class StackChar {
+public:
+    vector<char> stack;
+    
+    void push(char val) {
+        stack.push_back(val);
+    }
+    
+    void pop() {
+        if (!stack.empty()) stack.pop_back();
+    }
+    
+    char top() {
+        if (stack.empty()) return '\0';
+        return stack.back();
+    }
+    
+    bool isEmpty() {
+        return stack.empty();
+    }
+};
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    if (op == '^') return 3;
+    return 0;
+}
+
+bool isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
+}
+
+void infixToPostfix() {
+    string infix;
+    cout << "Enter infix: ";
+    cin >> infix;
+    
+    StackChar s;
+    string postfix = "";
+    
+    for (int i = 0; i < infix.length(); i++) {
+        char c = infix[i];
+        
+        if (isalnum(c)) {
+            postfix += c;
+        } else if (c == '(') {
+            s.push(c);
+        } else if (c == ')') {
+            while (!s.isEmpty() && s.top() != '(') {
+                postfix += s.top();
+                s.pop();
+            }
+            s.pop();
+        } else if (isOperator(c)) {
+            while (!s.isEmpty() && precedence(s.top()) >= precedence(c)) {
+                postfix += s.top();
+                s.pop();
+            }
+            s.push(c);
+        }
+    }
+    
+    while (!s.isEmpty()) {
+        postfix += s.top();
+        s.pop();
+    }
+    
+    cout << "Postfix: " << postfix << endl;
+}
+
+void palindromeCheck() {
+    string str;
+    cout << "Enter string: ";
+    cin >> str;
+    
+    StackChar s;
+    for (int i = 0; i < str.length(); i++) {
+        s.push(str[i]);
+    }
+    
+    string reversed = "";
+    while (!s.isEmpty()) {
+        reversed += s.top();
+        s.pop();
+    }
+    
+    if (str == reversed) cout << "Palindrome" << endl;
+    else cout << "Not palindrome" << endl;
+}
+
+void reverseString() {
+    string str;
+    cout << "Enter string: ";
+    cin >> str;
+    
+    StackChar s;
+    for (int i = 0; i < str.length(); i++) {
+        s.push(str[i]);
+    }
+    
+    string reversed = "";
+    while (!s.isEmpty()) {
+        reversed += s.top();
+        s.pop();
+    }
+    
+    cout << "Reversed: " << reversed << endl;
+}
+
+void parenthesisMatch() {
+    string str;
+    cout << "Enter expression: ";
+    cin >> str;
+    
+    StackChar s;
+    bool balanced = true;
+    
+    for (int i = 0; i < str.length(); i++) {
+        char c = str[i];
+        if (c == '(' || c == '{' || c == '[') {
+            s.push(c);
+        } else if (c == ')' || c == '}' || c == ']') {
+            if (s.isEmpty()) {
+                balanced = false;
+                break;
+            }
+            char top = s.top();
+            if ((c == ')' && top == '(') || (c == '}' && top == '{') || (c == ']' && top == '[')) {
+                s.pop();
+            } else {
+                balanced = false;
+                break;
+            }
+        }
+    }
+    
+    if (!s.isEmpty()) balanced = false;
+    
+    if (balanced) cout << "Balanced" << endl;
+    else cout << "Not balanced" << endl;
+}
+
+void postfixEval() {
+    string postfix;
+    cout << "Enter postfix: ";
+    cin >> postfix;
+    
+    Stack s;
+    
+    for (int i = 0; i < postfix.length(); i++) {
+        char c = postfix[i];
+        
+        if (isdigit(c)) {
+            s.push(c - '0');
+        } else if (isOperator(c)) {
+            int val2 = s.top();
+            s.pop();
+            int val1 = s.top();
+            s.pop();
+            
+            if (c == '+') s.push(val1 + val2);
+            else if (c == '-') s.push(val1 - val2);
+            else if (c == '*') s.push(val1 * val2);
+            else if (c == '/') s.push(val1 / val2);
+        }
+    }
+    
+    cout << "Result: " << s.top() << endl;
+}
+
+void prefixEval() {
+    string prefix;
+    cout << "Enter prefix: ";
+    cin >> prefix;
+    
+    Stack s;
+    
+    for (int i = prefix.length() - 1; i >= 0; i--) {
+        char c = prefix[i];
+        
+        if (isdigit(c)) {
+            s.push(c - '0');
+        } else if (isOperator(c)) {
+            int val1 = s.top();
+            s.pop();
+            int val2 = s.top();
+            s.pop();
+            
+            if (c == '+') s.push(val1 + val2);
+            else if (c == '-') s.push(val1 - val2);
+            else if (c == '*') s.push(val1 * val2);
+            else if (c == '/') s.push(val1 / val2);
+        }
+    }
+    
+    cout << "Result: " << s.top() << endl;
+}
+
+void decimalToBinary() {
+    int n;
+    cout << "Enter decimal: ";
+    cin >> n;
+    
+    Stack s;
+    while (n > 0) {
+        s.push(n % 2);
+        n /= 2;
+    }
+    
+    cout << "Binary: ";
+    while (!s.isEmpty()) {
+        cout << s.top();
+        s.pop();
+    }
+    cout << endl;
+}
+
+void nextGreaterElement() {
+    int n;
+    cout << "Enter size: ";
+    cin >> n;
+    
+    vector<int> arr(n);
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++) cin >> arr[i];
+    
+    Stack s;
+    vector<int> result(n, -1);
+    
+    for (int i = n - 1; i >= 0; i--) {
+        while (!s.isEmpty() && s.top() <= arr[i]) {
+            s.pop();
+        }
+        if (!s.isEmpty()) result[i] = s.top();
+        s.push(arr[i]);
+    }
+    
+    cout << "Next greater elements: ";
+    for (int i = 0; i < n; i++) {
+        cout << result[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    Stack s;
+    int choice, val, n;
+    
+    while (true) {
+        cout << "\n1. Push\n2. Pop\n3. Multipop\n4. Ordered Push\n5. Peek\n6. Display\n7. Infix to Postfix\n8. Palindrome Check\n9. Reverse String\n10. Parenthesis Match\n11. Postfix Eval\n12. Prefix Eval\n13. Decimal to Binary\n14. Next Greater Element\n15. Exit\nChoice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                cout << "Value: ";
+                cin >> val;
+                s.push(val);
+                break;
+            case 2:
+                s.pop();
+                break;
+            case 3:
+                cout << "How many to pop: ";
+                cin >> n;
+                s.multipop(n);
+                break;
+            case 4:
+                cout << "Value: ";
+                cin >> val;
+                s.orderedPush(val);
+                break;
+            case 5:
+                s.peek();
+                break;
+            case 6:
+                s.display();
+                break;
+            case 7:
+                infixToPostfix();
+                break;
+            case 8:
+                palindromeCheck();
+                break;
+            case 9:
+                reverseString();
+                break;
+            case 10:
+                parenthesisMatch();
+                break;
+            case 11:
+                postfixEval();
+                break;
+            case 12:
+                prefixEval();
+                break;
+            case 13:
+                decimalToBinary();
+                break;
+            case 14:
+                nextGreaterElement();
+                break;
+            case 15:
+                return 0;
+        }
+    }
+}
+
+----------------------------
+------------stack in linked list adv problem
+--------------------------
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+struct NodeChar {
+    char data;
+    NodeChar* next;
+};
+
+class Stack {
+public:
+    Node* top;
+    
+    Stack() {
+        top = NULL;
+    }
+    
+    void push(int val) {
+        Node* newNode = new Node();
+        newNode->data = val;
+        newNode->next = top;
+        top = newNode;
+    }
+    
+    void pop() {
+        if (top == NULL) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+    }
+    
+    void multipop(int n) {
+        if (top == NULL) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        for (int i = 0; i < n && top != NULL; i++) {
+            Node* temp = top;
+            top = top->next;
+            delete temp;
+        }
+    }
+    
+    void orderedPush(int val) {
+        if (top == NULL || top->data >= val) {
+            push(val);
+            return;
+        }
+        int temp = top->data;
+        pop();
+        orderedPush(val);
+        push(temp);
+    }
+    
+    void peek() {
+        if (top == NULL) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        cout << "Top: " << top->data << endl;
+    }
+    
+    void display() {
+        if (top == NULL) {
+            cout << "Stack empty" << endl;
+            return;
+        }
+        Node* temp = top;
+        while (temp != NULL) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+    
+    int topVal() {
+        if (top == NULL) return -1;
+        return top->data;
+    }
+    
+    bool isEmpty() {
+        return top == NULL;
+    }
+};
+
+class StackChar {
+public:
+    NodeChar* top;
+    
+    StackChar() {
+        top = NULL;
+    }
+    
+    void push(char val) {
+        NodeChar* newNode = new NodeChar();
+        newNode->data = val;
+        newNode->next = top;
+        top = newNode;
+    }
+    
+    void pop() {
+        if (top != NULL) {
+            NodeChar* temp = top;
+            top = top->next;
+            delete temp;
+        }
+    }
+    
+    char topVal() {
+        if (top == NULL) return '\0';
+        return top->data;
+    }
+    
+    bool isEmpty() {
+        return top == NULL;
+    }
+};
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    if (op == '^') return 3;
+    return 0;
+}
+
+bool isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '^';
+}
+
+void infixToPostfix() {
+    string infix;
+    cout << "Enter infix: ";
+    cin >> infix;
+    
+    StackChar s;
+    string postfix = "";
+    
+    for (int i = 0; i < infix.length(); i++) {
+        char c = infix[i];
+        
+        if (isalnum(c)) {
+            postfix += c;
+        } else if (c == '(') {
+            s.push(c);
+        } else if (c == ')') {
+            while (!s.isEmpty() && s.topVal() != '(') {
+                postfix += s.topVal();
+                s.pop();
+            }
+            s.pop();
+        } else if (isOperator(c)) {
+            while (!s.isEmpty() && precedence(s.topVal()) >= precedence(c)) {
+                postfix += s.topVal();
+                s.pop();
+            }
+            s.push(c);
+        }
+    }
+    
+    while (!s.isEmpty()) {
+        postfix += s.topVal();
+        s.pop();
+    }
+    
+    cout << "Postfix: " << postfix << endl;
+}
+
+void palindromeCheck() {
+    string str;
+    cout << "Enter string: ";
+    cin >> str;
+    
+    StackChar s;
+    for (int i = 0; i < str.length(); i++) {
+        s.push(str[i]);
+    }
+    
+    string reversed = "";
+    while (!s.isEmpty()) {
+        reversed += s.topVal();
+        s.pop();
+    }
+    
+    if (str == reversed) cout << "Palindrome" << endl;
+    else cout << "Not palindrome" << endl;
+}
+
+void reverseString() {
+    string str;
+    cout << "Enter string: ";
+    cin >> str;
+    
+    StackChar s;
+    for (int i = 0; i < str.length(); i++) {
+        s.push(str[i]);
+    }
+    
+    string reversed = "";
+    while (!s.isEmpty()) {
+        reversed += s.topVal();
+        s.pop();
+    }
+    
+    cout << "Reversed: " << reversed << endl;
+}
+
+void parenthesisMatch() {
+    string str;
+    cout << "Enter expression: ";
+    cin >> str;
+    
+    StackChar s;
+    bool balanced = true;
+    
+    for (int i = 0; i < str.length(); i++) {
+        char c = str[i];
+        if (c == '(' || c == '{' || c == '[') {
+            s.push(c);
+        } else if (c == ')' || c == '}' || c == ']') {
+            if (s.isEmpty()) {
+                balanced = false;
+                break;
+            }
+            char topChar = s.topVal();
+            if ((c == ')' && topChar == '(') || (c == '}' && topChar == '{') || (c == ']' && topChar == '[')) {
+                s.pop();
+            } else {
+                balanced = false;
+                break;
+            }
+        }
+    }
+    
+    if (!s.isEmpty()) balanced = false;
+    
+    if (balanced) cout << "Balanced" << endl;
+    else cout << "Not balanced" << endl;
+}
+
+void postfixEval() {
+    string postfix;
+    cout << "Enter postfix: ";
+    cin >> postfix;
+    
+    Stack s;
+    
+    for (int i = 0; i < postfix.length(); i++) {
+        char c = postfix[i];
+        
+        if (isdigit(c)) {
+            s.push(c - '0');
+        } else if (isOperator(c)) {
+            int val2 = s.topVal();
+            s.pop();
+            int val1 = s.topVal();
+            s.pop();
+            
+            if (c == '+') s.push(val1 + val2);
+            else if (c == '-') s.push(val1 - val2);
+            else if (c == '*') s.push(val1 * val2);
+            else if (c == '/') s.push(val1 / val2);
+        }
+    }
+    
+    cout << "Result: " << s.topVal() << endl;
+}
+
+void prefixEval() {
+    string prefix;
+    cout << "Enter prefix: ";
+    cin >> prefix;
+    
+    Stack s;
+    
+    for (int i = prefix.length() - 1; i >= 0; i--) {
+        char c = prefix[i];
+        
+        if (isdigit(c)) {
+            s.push(c - '0');
+        } else if (isOperator(c)) {
+            int val1 = s.topVal();
+            s.pop();
+            int val2 = s.topVal();
+            s.pop();
+            
+            if (c == '+') s.push(val1 + val2);
+            else if (c == '-') s.push(val1 - val2);
+            else if (c == '*') s.push(val1 * val2);
+            else if (c == '/') s.push(val1 / val2);
+        }
+    }
+    
+    cout << "Result: " << s.topVal() << endl;
+}
+
+void decimalToBinary() {
+    int n;
+    cout << "Enter decimal: ";
+    cin >> n;
+    
+    Stack s;
+    while (n > 0) {
+        s.push(n % 2);
+        n /= 2;
+    }
+    
+    cout << "Binary: ";
+    while (!s.isEmpty()) {
+        cout << s.topVal();
+        s.pop();
+    }
+    cout << endl;
+}
+
+void nextGreaterElement() {
+    int size;
+    cout << "Enter size: ";
+    cin >> size;
+    
+    int* arr = new int[size];
+    int* result = new int[size];
+    
+    cout << "Enter elements: ";
+    for (int i = 0; i < size; i++) cin >> arr[i];
+    
+    for (int i = 0; i < size; i++) result[i] = -1;
+    
+    Stack s;
+    
+    for (int i = size - 1; i >= 0; i--) {
+        while (!s.isEmpty() && s.topVal() <= arr[i]) {
+            s.pop();
+        }
+        if (!s.isEmpty()) result[i] = s.topVal();
+        s.push(arr[i]);
+    }
+    
+    cout << "Next greater elements: ";
+    for (int i = 0; i < size; i++) {
+        cout << result[i] << " ";
+    }
+    cout << endl;
+    
+    delete[] arr;
+    delete[] result;
+}
+
+int main() {
+    Stack s;
+    int choice, val, n;
+    
+    while (true) {
+        cout << "\n1. Push\n2. Pop\n3. Multipop\n4. Ordered Push\n5. Peek\n6. Display\n7. Infix to Postfix\n8. Palindrome Check\n9. Reverse String\n10. Parenthesis Match\n11. Postfix Eval\n12. Prefix Eval\n13. Decimal to Binary\n14. Next Greater Element\n15. Exit\nChoice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                cout << "Value: ";
+                cin >> val;
+                s.push(val);
+                break;
+            case 2:
+                s.pop();
+                break;
+            case 3:
+                cout << "How many to pop: ";
+                cin >> n;
+                s.multipop(n);
+                break;
+            case 4:
+                cout << "Value: ";
+                cin >> val;
+                s.orderedPush(val);
+                break;
+            case 5:
+                s.peek();
+                break;
+            case 6:
+                s.display();
+                break;
+            case 7:
+                infixToPostfix();
+                break;
+            case 8:
+                palindromeCheck();
+                break;
+            case 9:
+                reverseString();
+                break;
+            case 10:
+                parenthesisMatch();
+                break;
+            case 11:
+                postfixEval();
+                break;
+            case 12:
+                prefixEval();
+                break;
+            case 13:
+                decimalToBinary();
+                break;
+            case 14:
+                nextGreaterElement();
+                break;
+            case 15:
+                return 0;
+        }
+    }
+}
