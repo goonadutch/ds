@@ -1459,6 +1459,51 @@ int main() {
 }
 
 
+// Add these functions to your AVL class
+
+// Print nodes in range [low, high]
+void printInRange(Node* node, int low, int high) {
+    if (node == NULL) return;
+    
+    if (node->data > low) 
+        printInRange(node->left, low, high);
+    
+    if (node->data >= low && node->data <= high)
+        cout << node->data << " ";
+    
+    if (node->data < high)
+        printInRange(node->right, low, high);
+}
+
+// Count nodes in range [low, high]
+int countInRange(Node* node, int low, int high) {
+    if (node == NULL) return 0;
+    
+    int count = 0;
+    
+    if (node->data > low)
+        count += countInRange(node->left, low, high);
+    
+    if (node->data >= low && node->data <= high)
+        count++;
+    
+    if (node->data < high)
+        count += countInRange(node->right, low, high);
+    
+    return count;
+}
+
+// Check if tree is valid AVL
+bool isValidAVL(Node* node) {
+    if (node == NULL) return true;
+    
+    int bf = getBalance(node);
+    
+    if (bf < -1 || bf > 1) return false;
+    
+    return isValidAVL(node->left) && isValidAVL(node->right);
+}
+
 ------------------------------------
 ---------------HEAP----------------------
 -------------------------------------
